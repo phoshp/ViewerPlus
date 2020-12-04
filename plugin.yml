@@ -1,0 +1,6 @@
+name: ViewerPlus
+main: phoshp\viewerplus\ViewerPlus
+author: phoshp
+version: 1.0
+api: 3.9.5
+description: A api to make better spectator
