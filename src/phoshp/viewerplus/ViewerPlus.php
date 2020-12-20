@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace phoshp\viewerplus;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\event\server\DataPacketSendEvent;
 use pocketmine\network\mcpe\protocol\AdventureSettingsPacket;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
@@ -58,7 +59,16 @@ class ViewerPlus extends PluginBase implements Listener{
 				if($mode === self::VIEWER_SURVIVAL or $mode === self::VIEWER_CREATIVE){
 					$packet->setFlag(AdventureSettingsPacket::NO_CLIP, false);
 				}
-			}elseif($packet instanceof LevelSoundEventPacket){
+			}
+		}
+	}
+
+	public function onReceivePacket(DataPacketReceiveEvent $event){
+		$player = $event->getPlayer();
+		$packet = $event->getPacket();
+
+		if($mode = self::getViewerMode($player)){
+			if($packet instanceof LevelSoundEventPacket){
 				$event->setCancelled();
 				$player->sendDataPacket($packet);
 			}
